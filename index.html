@@ -585,19 +585,19 @@
         <h3>My favourite person, my Lado 📸</h3>
         <p>Har photo mein tumhari ek alag si muskurahat — aur mere liye ek pyari si yaad. ❤️</p>
         <div class="memory-grid">
-          <figure class="memory-photo"><img src="assets/photos/lado-portrait-01.png" alt="Lado smiling in a pink traditional outfit" loading="lazy"><figcaption>My favourite smile 💗</figcaption></figure>
-          <figure class="memory-photo"><img src="assets/photos/lado-full-02.jpg" alt="Lado standing in her pink outfit" loading="lazy"><figcaption>Beautiful, always 🌸</figcaption></figure>
-          <figure class="memory-photo"><img src="assets/photos/lado-portrait-03.png" alt="Lado in warm golden light" loading="lazy"><figcaption>My sunshine ✨</figcaption></figure>
-          <figure class="memory-photo"><img src="assets/photos/lado-selfie-04.jpg" alt="A close-up selfie of Lado" loading="lazy"><figcaption>That lovely face 🥹</figcaption></figure>
-          <figure class="memory-photo"><img src="assets/photos/lado-portrait-05.jpg" alt="Lado smiling in a pink outfit" loading="lazy"><figcaption>Always special 🌷</figcaption></figure>
-          <figure class="memory-photo"><img src="assets/photos/lado-memory-06.png" alt="A playful selfie of Lado" loading="lazy"><figcaption>My cute Lado 🦋</figcaption></figure>
+          <figure class="memory-photo"><img src="lado-portrait-01.png" alt="Lado smiling in a pink traditional outfit" loading="lazy"><figcaption>My favourite smile 💗</figcaption></figure>
+          <figure class="memory-photo"><img src="lado-full-02.jpg" alt="Lado standing in her pink outfit" loading="lazy"><figcaption>Beautiful, always 🌸</figcaption></figure>
+          <figure class="memory-photo"><img src="lado-portrait-03.png" alt="Lado in warm golden light" loading="lazy"><figcaption>My sunshine ✨</figcaption></figure>
+          <figure class="memory-photo"><img src="lado-selfie-04.jpg" alt="A close-up selfie of Lado" loading="lazy"><figcaption>That lovely face 🥹</figcaption></figure>
+          <figure class="memory-photo"><img src="lado-portrait-05.jpg" alt="Lado smiling in a pink outfit" loading="lazy"><figcaption>Always special 🌷</figcaption></figure>
+          <figure class="memory-photo"><img src="lado-memory-06.png" alt="A playful selfie of Lado" loading="lazy"><figcaption>My cute Lado 🦋</figcaption></figure>
         </div>
         <div class="song-card">
           <span class="song-note" aria-hidden="true">♫</span>
           <div class="song-copy"><strong>Our birthday song</strong><span>Nawari Distes G</span></div>
           <button class="song-button" id="song-toggle" type="button" aria-pressed="false">▶ Play song</button>
         </div>
-        <audio id="birthday-song" src="assets/nawari-distes-g.m4a" preload="metadata" loop></audio>
+        <audio id="birthday-song" src="nawari-distes-g.m4a" preload="metadata" loop></audio>
         <p class="song-note-small" id="song-status" aria-live="polite">Tap karke apna birthday song play karo. 💗</p>
       </section>
       <div class="letter-footer">
@@ -633,6 +633,12 @@
         }
       }
       window.openBirthdaySurprise = function () { gate.classList.add('gate-hidden'); };
+
+      // Preview the full birthday website before 27 November 2026.
+      // Normal visitors still see the countdown unless they add ?preview=1.
+      if (new URLSearchParams(window.location.search).has('preview')) {
+        gate.classList.add('gate-hidden');
+      }
       function tick() {
         const now = Date.now();
         const diff = target - now;
