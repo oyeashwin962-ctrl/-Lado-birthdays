@@ -15,6 +15,57 @@
 
   <!-- External Stylesheet -->
   <link rel="stylesheet" href="style.css">
+
+  <style id="long-scenes-scroll-fix">
+    /* Let long birthday content scroll inside its own scene. */
+    #scene-wishes,
+    #scene-letter {
+      justify-content: flex-start !important;
+      align-items: center;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      overscroll-behavior-y: contain;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: #f58aae rgba(255, 255, 255, 0.35);
+      padding-top: clamp(24px, 5vh, 56px) !important;
+      padding-bottom: 56px !important;
+      height: 100%;
+    }
+
+    #scene-wishes > *,
+    #scene-letter > * {
+      flex-shrink: 0;
+    }
+
+    #scene-wishes .marathi-inline,
+    #scene-wishes .wishes-card,
+    #scene-letter .letter-card {
+      max-width: min(100%, 900px);
+    }
+
+    #scene-wishes .marathi-inline {
+      margin-bottom: 28px;
+    }
+
+    #scene-wishes .wishes-card {
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 600px) {
+      #scene-wishes,
+      #scene-letter {
+        padding: 22px 14px 40px !important;
+      }
+
+      #scene-wishes .marathi-inline,
+      #scene-wishes .wishes-card,
+      #scene-letter .letter-card {
+        width: 100%;
+      }
+    }
+  </style>
+
 </head>
 <body>
 
@@ -511,7 +562,7 @@
   </div>
 
   <!-- ===== SCENE 7: WISHES LIST ===== -->
-  <div class="scene" id="scene-wishes" onclick="goToScene(7)" style="cursor: pointer;">
+  <div class="scene" id="scene-wishes">
     <div class="marathi-inline">
       <div class="marathi-heading">Happy Birthday, Lado</div>
       <p>तुला काय गिफ्ट घ्यावं याचा विचार केला,</p>
