@@ -301,6 +301,35 @@
     }
   </style>
 
+
+  <style id="wait-popups-style">
+    #countdown-card { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    #countdown-card:active { transform: scale(.985); }
+    #wait-quote-overlay {
+      position: fixed; inset: 0; z-index: 10000; display: none;
+      align-items: center; justify-content: center; padding: 22px;
+      background: rgba(69, 19, 48, .28); backdrop-filter: blur(7px);
+      -webkit-backdrop-filter: blur(7px);
+    }
+    #wait-quote-overlay.is-open { display: flex; }
+    #wait-quote-card {
+      width: min(100%, 430px); position: relative; text-align: center;
+      padding: 30px 24px 24px; border: 1px solid rgba(255,255,255,.85);
+      border-radius: 26px; color: #54213f;
+      background: linear-gradient(145deg, #fffafd, #ffe4ef 68%, #ffefd9);
+      box-shadow: 0 24px 70px rgba(103, 26, 67, .28);
+      animation: waitPopIn .42s cubic-bezier(.18,.9,.28,1.25) both;
+    }
+    #wait-quote-card .wait-heart { font-size: 34px; line-height: 1; margin-bottom: 14px; }
+    #wait-quote-card .wait-label { font-size: 10px; letter-spacing: .2em; font-weight: 900; color: #d83e79; margin-bottom: 12px; }
+    #wait-quote-text { font-size: clamp(19px, 4.8vw, 25px); line-height: 1.55; font-weight: 800; overflow-wrap: anywhere; }
+    #wait-quote-hint { font-size: 12px; color: #9b637c; margin: 15px 0 0; }
+    #wait-quote-close { margin-top: 18px; border: 0; border-radius: 999px; padding: 12px 22px; color: white; font-weight: 800; background: linear-gradient(135deg,#f45b98,#d92f70); box-shadow: 0 7px 18px rgba(217,47,112,.25); cursor: pointer; }
+    @keyframes waitPopIn { 0% { opacity: 0; transform: translateY(18px) scale(.72) rotate(-2deg); } 70% { opacity: 1; transform: translateY(-3px) scale(1.035) rotate(.5deg); } 100% { opacity: 1; transform: translateY(0) scale(1) rotate(0); } }
+    @keyframes waitPopOut { to { opacity: 0; transform: scale(.88) translateY(8px); } }
+    @media (prefers-reduced-motion: reduce) { #wait-quote-card { animation: none; } }
+  </style>
+
 </head>
 <body>
 
@@ -1018,5 +1047,64 @@
   </script>
 
   <script src="script.js"></script>
+
+<div id="wait-quote-overlay" role="dialog" aria-modal="true" aria-labelledby="wait-quote-text">
+  <div id="wait-quote-card">
+    <div class="wait-heart" aria-hidden="true">💗</div>
+    <div class="wait-label">EK CHHOTI SI BAAT, MERI LADO KE LIYE</div>
+    <div id="wait-quote-text">Yrr wait nahi ho raha aapse… sach mein ziddi ho aap! 💗</div>
+    <p id="wait-quote-hint">Ek aur pyaari baat sunne ke liye phir se countdown par tap karna. ✨</p>
+    <button id="wait-quote-close" type="button">Achha baba, wait karte hain 💌</button>
+  </div>
+</div>
+<script id="wait-quote-interaction">
+(function () {
+  const card = document.getElementById('countdown-card');
+  const overlay = document.getElementById('wait-quote-overlay');
+  const quoteText = document.getElementById('wait-quote-text');
+  const closeButton = document.getElementById('wait-quote-close');
+  if (!card || !overlay || !quoteText || !closeButton) return;
+
+  const quotes = ['Yrr wait nahi ho raha aapse… sach mein ziddi ho aap! 💗', 'Madam ji, thoda jaldi aa jao na… dil se wait nahi hota. 🥹', 'Abhi se itna wait karwa rahi ho, birthday wale din kya hoga? 😤💖', 'Lado, countdown dekhne aayi thi ya mujhe tadpane? 👻', 'Ek click aur ek baat: aap bahut yaad aa rahi ho. ❤️', 'Jaldi milne ka button hota toh abhi daba deta. 🫶', 'Madam ji, aapki entry ka intezaar hai… royal entry honi chahiye! 👑', 'Wait karna mushkil hai, par aapke liye kar lenge. 💌', 'Countdown slow nahi hai… bas mera dil fast chal raha hai. 💓', 'Abhi toh surprise ka trailer hai, picture birthday par hai. 🎬', 'Lado ji, patience naam ki cheez aaj chhutti par hai. 😂', 'Aapko pata bhi hai koi yahan seconds gin raha hai? ⏳', 'Bas ek baar muskura do, wait thoda easy ho jayega. 😊', 'Madam ji, itni cute hokar itna wait karwana allowed hai kya? 😭', 'Birthday aapka hai, excitement meri double hai. 🎂', 'Ek secret: main countdown se zyada aapko dekhne ka wait kar raha hoon. 💗', 'Jiddi aap, bechain main… kya perfect combination hai! 😌', 'Abhi click kiya? Achha, ek aur cute si baat suno. 💞', 'Har second ke saath surprise aur special hota ja raha hai. ✨', 'Lado, aapke liye banaya hai… thoda pyaar extra hai. 💝', 'Ruk jao zara, dil ko aapki yaad ka notification aaya. 📩', 'Madam ji, aapko wait karwana pasand hai na? Pakdi gayi! 😏', 'Countdown dekhte raho, main pyaar bhejta rahunga. 💌', 'Kaash seconds ki jagah steps hote, seedha aap tak aa jaata. 🏃\u200d♂️', 'Aapki smile ke liye toh 100 baar bhi wait kar lenge. 🌷', 'Yeh click aapke naam… aur agla bhi aapke naam. 💖', 'Thoda sa sabr, meri jaan—surprise ready ho raha hai. 🎁', 'Time apni speed se chale, mera dil toh aapke paas hai. ❤️', 'Madam ji, countdown ko mat dekho, mera pyaar dekho. 🥰', 'Aap special ho, isliye wait bhi special banaya hai. ✨', 'Ek aur click? Matlab meri baatein pasand aa rahi hain. Hehe. 😋', 'Birthday tak ka safar bhi aapke saath cute lagta hai. 🌸', 'Main serious hoon… bas aapko tang karna bhi zaroori hai. 😌', 'Lado, jaldi aao warna main 101vi baat bhi bol dunga. 😂', 'Har tick-tick keh rahi hai: Lado ka din paas aa raha hai. ⏰', 'Yeh chhota sa pop-up, mere bade se pyaar ki taraf se. 💗', 'Aapka naam aate hi boring wait bhi romantic lagta hai. 🌹', 'Madam ji, itna attitude birthday par bhi chalega. 👻', 'Bas aap khush raho, baaki countdown main sambhal lunga. 💞', 'Surprise khulne se pehle ek virtual hug le lo. 🤗', 'Ek click = ek pyaari si yaad. Aaj ka rule hai. 💌', 'Yeh website bhi keh rahi hai: Lado, jaldi aa jao! 😂', 'Wait karte karte aapke liye aur pyaar badh raha hai. 💓', 'Main impatient nahi hoon… bas aapke maamle mein ho jaata hoon. 😅', 'Aapki birthday wali smile imagine karke hi khushi ho rahi hai. 🎂', 'Thoda aur wait, phir aapke liye poora pyaar hi pyaar. 💝', 'Madam ji, countdown ko refresh mat karna, pyaar already loaded hai. 😉', 'Aapko yaad karna meri favourite notification hai. 📱', 'Ek pop-up aapke liye, ek smile meri taraf se. 😊', 'Lado, aapke bina seconds bhi extra long lagte hain. ⌛', 'Yeh wait khatam hoga, par aapko tang karna nahi. 😜', 'Bas itna samajh lo: surprise chhota, pyaar unlimited. ♾️', 'Madam ji, aapko special feel karwana mera mission hai. 🎯', 'Abhi se butterflies ho rahi hain… birthday par toh pata nahi! 🦋', 'Ek aur click par ek aur confession: I miss you. 💗', 'Aap meri favourite person ho, isliye favourite wait bhi aapka. 🌷', 'Jaldi aane ki zaroorat nahi… par dil toh yahi bolta hai. 🥹', 'Yeh countdown nahi, aapke liye likha hua love note hai. 💌', 'Madam ji, aapka surprise patiently wait kar raha hai. Main nahi. 😂', 'Aapki ek hasi ke liye poora din bana sakta hoon. ☀️', 'Bas aap aur main, aur thodi si birthday wali magic. ✨', 'Click kiya? Toh ek flying kiss accept karo. 😘', 'Main yahan hoon, aap wahan… par pyaar full signal par hai. 📶❤️', 'Wait ka har second aapke naam likh diya hai. 📝', 'Birthday queen ke liye countdown bhi royal hona chahiye. 👑', 'Madam ji, aapko surprise pasand aayega—dil se banaya hai. 💖', 'Aapka naam screen par aur smile mere face par. 😊', 'Ek click aur ek reminder: aap bahut precious ho. 💎', 'Main aapko tease kar raha hoon, kyunki aap cute lagti ho. 😌', 'Thoda sa intezaar, phir full-on birthday wali khushi. 🎉', 'Lado, aapki khushi meri favourite achievement hai. 🫶', 'Countdown ka har number keh raha hai: almost there! ⏳', 'Madam ji, zidd aapki, surprise mera. Deal? 🤝💗', 'Aapko haste dekhna hi meri favourite ending hai. 🌸', 'Yeh pop-up chhota hai, par ismein pyaar bada hai. 💝', 'Abhi ek smile de do, main agla second bhi nikaal lunga. 😄', 'Birthday ka wait karte karte aapki yaadein replay ho rahi hain. 🎞️', 'Main har click par nayi baat bolunga, aap bas muskura dena. 💌', 'Yeh wala message specially meri Lado ke liye. ❤️', 'Madam ji, aapko pata hai na aap kitni special ho? 🥹', 'Surprise ke saath ek promise: aapko hamesha smile karane ki koshish. 🌷', 'Main countdown se nahi, aapse milne se excited hoon. 💓', 'Bas thoda sa aur… phir cake, wishes aur pyaar! 🎂', 'Aap meri favourite notification se bhi zyada special ho. 🔔', 'Yeh click aapke liye ek tiny love letter hai. 💌', 'Jitni baar click, utni baar yaad dilaoonga: I love you. 💗', 'Wait karna mushkil hai, aapko pyaar karna easy. 🫶', 'Madam ji, please jaldi aa jao… dil ne request bheji hai. 🥺', 'Aapka birthday aane wala hai aur main already celebrate kar raha hoon. 🎉', 'Ek aur second gaya, aapke special day ke aur paas aaye. ✨', 'Lado, aap meri favourite story ka favourite chapter ho. 📖', 'Main jiddi nahi… bas aapke liye thoda extra excited hoon. 😇', 'Is click ke badle ek virtual cuddle le lo. 🤗', 'Aapki khushi ke liye chhoti chhoti surprises banata rahunga. 🎁', 'Madam ji, aapko wait karwana galat hai… par cute bhi. 😂', 'Bas ek baat yaad rakhna: aap loved ho, bahut zyada. 💖', 'Countdown chal raha hai, par mera pyaar rukta nahi. ♾️', 'Har baar click karo, main phir se bolunga—miss you, Lado. 💗', 'Abhi toh 100 baatein hain, aur dil mein hazaar. 🌹', 'Yrr wait nahi ho raha aapse… sach mein ziddi ho aap! Ab smile karo. 💞'];
+  let lastIndex = -1;
+
+  function showWaitQuote() {
+    let index = Math.floor(Math.random() * quotes.length);
+    if (quotes.length > 1 && index === lastIndex) index = (index + 1) % quotes.length;
+    lastIndex = index;
+    quoteText.textContent = quotes[index];
+    overlay.classList.remove('is-open');
+    void overlay.offsetWidth;
+    overlay.classList.add('is-open');
+  }
+  function closeWaitQuote() {
+    const popup = document.getElementById('wait-quote-card');
+    popup.style.animation = 'waitPopOut .18s ease forwards';
+    window.setTimeout(() => {
+      overlay.classList.remove('is-open');
+      popup.style.animation = '';
+    }, 170);
+  }
+
+  card.setAttribute('role', 'button');
+  card.setAttribute('tabindex', '0');
+  card.setAttribute('aria-label', 'Tap for a little love message');
+  card.addEventListener('click', showWaitQuote);
+  card.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      showWaitQuote();
+    }
+  });
+  closeButton.addEventListener('click', closeWaitQuote);
+  overlay.addEventListener('click', (event) => {
+    if (event.target === overlay) closeWaitQuote();
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && overlay.classList.contains('is-open')) closeWaitQuote();
+  });
+})();
+</script>
+
 </body>
 </html>
