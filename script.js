@@ -174,11 +174,23 @@ const TOTAL_SCENES = 8;
       onUpdate() { updateString(this.targets()[0].d); }
     });
 
-    // 2. Arrow flies precisely into the target heart center
+    // 2. Calculate the actual heart position on this viewport (desktop + mobile).
+    // This avoids the arrow missing the heart when the bow layout changes.
+    const heartTarget = document.getElementById('emergingHeart');
+    const arrowRect = arrowSvg ? arrowSvg.getBoundingClientRect() : null;
+    const heartRect = heartTarget ? heartTarget.getBoundingClientRect() : null;
+    const dx = (arrowRect && heartRect)
+      ? (heartRect.left + heartRect.width / 2) - (arrowRect.left + arrowRect.width / 2)
+      : 0;
+    const dy = (arrowRect && heartRect)
+      ? (heartRect.top + heartRect.height / 2) - (arrowRect.top + arrowRect.height / 2)
+      : -210;
+
     gsap.to(arrowSvg, {
-      y: -210,
+      x: `+=${dx}`,
+      y: `+=${dy}`,
       scaleY: 1.05,
-      duration: 0.22,
+      duration: 0.48,
       ease: 'power2.in',
       onComplete: () => {
         // Arrow impact: Heart recoils & wiggles
@@ -1244,8 +1256,47 @@ const TOTAL_SCENES = 8;
   // Interactive Candle Blow Out & Wish Reveal
   let isCandleBlown = false;
 
+
+  // Added bonus scenes: blooming flowers -> retro Tube Clock -> original balloons.
+  function openFlowerSurprise() {
+    const flowerOverlay = document.getElementById('flower-surprise-overlay');
+    if (!flowerOverlay) { goToScene(5); return; }
+    flowerOverlay.classList.add('is-open');
+    flowerOverlay.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('bonus-scene-open');
+  }
+
+  function openTubeClockSurprise() {
+    const flowerOverlay = document.getElementById('flower-surprise-overlay');
+    const clockOverlay = document.getElementById('tube-clock-overlay');
+    if (flowerOverlay) {
+      flowerOverlay.classList.remove('is-open');
+      flowerOverlay.setAttribute('aria-hidden', 'true');
+    }
+    if (clockOverlay) {
+      clockOverlay.classList.add('is-open');
+      clockOverlay.setAttribute('aria-hidden', 'false');
+    } else {
+      goToScene(5);
+    }
+  }
+
+  function continueFromTubeClock() {
+    const clockOverlay = document.getElementById('tube-clock-overlay');
+    if (clockOverlay) {
+      clockOverlay.classList.remove('is-open');
+      clockOverlay.setAttribute('aria-hidden', 'true');
+    }
+    document.body.classList.remove('bonus-scene-open');
+    goToScene(5);
+  }
+
+  window.openFlowerSurprise = openFlowerSurprise;
+  window.openTubeClockSurprise = openTubeClockSurprise;
+  window.continueFromTubeClock = continueFromTubeClock;
+
   function onCakeTap(e) {
-    if (e) e.stopPropagation();
+    if (e) { e.preventDefault(); e.stopPropagation(); }
 
     // Elastic Bounce & Squish Animation
     const svg = document.getElementById('cakeSvg');
@@ -1287,14 +1338,73 @@ const TOTAL_SCENES = 8;
         subtext.style.color = "#f03e7b";
       }
     } else {
-      // Tap again advances to next scene (Balloons)
-      goToScene(5);
+      // Once the candle is out, the next cake tap performs the cake-cut celebration.
+      startCakeCutAnimation();
     }
+  }
+
+  let cakeCutDone = false;
+  let cakeCutRunning = false;
+
+  function handleCakeCutButton(event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    if (cakeCutDone) {
+      openFlowerSurprise();
+      return;
+    }
+    startCakeCutAnimation();
+  }
+
+  function startCakeCutAnimation() {
+    if (cakeCutDone || cakeCutRunning) return;
+    cakeCutRunning = true;
+
+    const scene = document.getElementById('scene-cake');
+    const layout = scene && scene.querySelector('.cake-celebration-layout');
+    const cutButton = document.getElementById('cakeCutBtn');
+    const subtext = scene && scene.querySelector('.cake-subtext');
+    const flames = document.querySelectorAll('#scene-cake .fuego');
+
+    isCandleBlown = true;
+    flames.forEach((flame) => flame.classList.add('extinguished'));
+    if (layout) layout.classList.add('cutting');
+    if (subtext) subtext.textContent = 'A little cake-cutting magic for our little birthday star… 🎂✨';
+    if (cutButton) {
+      cutButton.disabled = true;
+      cutButton.textContent = 'Cutting with love… 💗';
+    }
+
+    triggerCakeSparklers();
+    burstCakeParticles();
+
+    window.setTimeout(() => {
+      if (layout) {
+        layout.classList.remove('cutting');
+        layout.classList.add('cake-cut-complete');
+      }
+      if (scene) scene.classList.add('cake-happy');
+      if (subtext) {
+        subtext.textContent = 'Yaaay! Cake cut ho gaya! Ab dekho kitni khush hai! 🎉💖';
+        subtext.style.color = '#d83e79';
+      }
+      if (cutButton) {
+        cutButton.disabled = false;
+        cutButton.classList.add('continue-mode');
+        cutButton.textContent = 'Continue to flowers 🌸 →';
+      }
+      cakeCutDone = true;
+      cakeCutRunning = false;
+      triggerCakeSparklers();
+    }, 1050);
   }
 
   function triggerCakeSparklers() {
     const emojis = ['✨', '💖', '⭐', '🌸', '🎉', '💫', '🎂'];
-    for (let i = 0; i < 25; i++) {
+    const particleCount = window.matchMedia("(max-width: 680px)").matches ? 12 : 20;
+    for (let i = 0; i < particleCount; i++) {
       const p = document.createElement('div');
       p.className = 'falling-celebration-particle';
       p.innerText = emojis[Math.floor(Math.random() * emojis.length)];
