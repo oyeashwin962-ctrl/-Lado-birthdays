@@ -489,7 +489,8 @@
       <div><strong id="cd-seconds">00</strong><span>Seconds</span></div>
     </div>
     <div class="countdown-track"><span id="countdown-progress"></span></div>
-    <p class="gate-date">27 November 2026 · Made with love 💗</p>
+    <p class="gate-date">27 November 2026 · 12:00 AM IST · Made with love 💗</p>
+    <button class="gate-button" id="countdown-continue" type="button" onclick="event.stopPropagation(); openBirthdaySurprise();">Continue to birthday surprise 💌 →</button>
   </div>
   <div class="gate-card calendar-card" id="calendar-card" hidden>
     <div class="gate-kicker">TODAY IS ALL ABOUT YOU</div>
@@ -507,9 +508,15 @@
   <div class="scene active" id="scene-intro" onclick="goToScene(1)" style="cursor: pointer;">
     <div class="dots-grid"></div>
     <div class="intro-badge">✨ 12:00 AM · MIDNIGHT WISH ✨</div>
-    <div class="intro-time-wrap">
-      <span class="intro-time">12:00</span>
-      <span class="intro-ampm">AM</span>
+    <div class="intro-time-wrap intro-birthday-date">
+      <span class="intro-time">27 NOV</span>
+      <span class="intro-ampm">2026 · 12:00 AM IST</span>
+    </div>
+    <div class="intro-live-countdown" aria-label="Live countdown to 27 November 2026 at midnight">
+      <div><strong id="intro-cd-days">00</strong><span>DAYS</span></div>
+      <div><strong id="intro-cd-hours">00</strong><span>HOURS</span></div>
+      <div><strong id="intro-cd-minutes">00</strong><span>MINUTES</span></div>
+      <div><strong id="intro-cd-seconds">00</strong><span>SECONDS</span></div>
     </div>
     <div class="intro-subtitle">
       Raat ke 12 baj gaye... 🌙
@@ -517,7 +524,7 @@
     </div>
     <div class="msg-bubble" onclick="event.stopPropagation(); goToScene(1);">
       <span class="msg-main">Happy Birthday Lado! 🎂✨</span>
-      <span class="msg-hint">TAP TO OPEN YOUR MIDNIGHT GIFT 🎁 →</span>
+      <span class="msg-hint" id="intro-countdown-button">TAP TO OPEN YOUR MIDNIGHT GIFT 🎁 →</span>
     </div>
   </div>
 
@@ -758,23 +765,23 @@
       <div class="wishes-card-title">CUPID EXPRESS · WISHES FOR HAYATI</div>
       <div class="wish-item">
         <span>✨ Endless smiles & genuine happiness every single day</span>
-        <span class="wish-delivered">DELIVERED ✓</span>
+        <button type="button" class="wish-delivered" onclick="event.stopPropagation(); stampWish(this)" aria-label="Tap to stamp this wish as delivered">DELIVERED ✓</button>
       </div>
       <div class="wish-item">
         <span>🌸 Peaceful mornings & moments of pure magic</span>
-        <span class="wish-delivered">DELIVERED ✓</span>
+        <button type="button" class="wish-delivered" onclick="event.stopPropagation(); stampWish(this)" aria-label="Tap to stamp this wish as delivered">DELIVERED ✓</button>
       </div>
       <div class="wish-item">
         <span>💖 A heart that always feels deeply loved & safe</span>
-        <span class="wish-delivered">DELIVERED ✓</span>
+        <button type="button" class="wish-delivered" onclick="event.stopPropagation(); stampWish(this)" aria-label="Tap to stamp this wish as delivered">DELIVERED ✓</button>
       </div>
       <div class="wish-item">
         <span>🌹 Every wish you make under the stars coming true</span>
-        <span class="wish-delivered">DELIVERED ✓</span>
+        <button type="button" class="wish-delivered" onclick="event.stopPropagation(); stampWish(this)" aria-label="Tap to stamp this wish as delivered">DELIVERED ✓</button>
       </div>
       <div class="wish-item">
         <span>💌 A promise to stand by your side forever & always</span>
-        <span class="wish-delivered">DELIVERED ✓</span>
+        <button type="button" class="wish-delivered" onclick="event.stopPropagation(); stampWish(this)" aria-label="Tap to stamp this wish as delivered">DELIVERED ✓</button>
       </div>
 
       <div class="wishes-next-wrap">
@@ -851,6 +858,7 @@
         <button class="celebrate-again-btn" onclick="triggerLetterConfetti(event)">
           🎉 Celebrate Again! ✨
         </button>
+        <button class="final-clock-btn" type="button" onclick="openTubeClockSurprise()">One last little surprise · Live Tube Clock ⏰</button>
       </div>
     </div>
 
@@ -1051,8 +1059,8 @@
         <div class="bloom-grass"></div>
       </div>
       <div class="flower-sparkles" aria-hidden="true">✦　✧　💖　✧　✦</div>
-      <button class="bonus-next-btn" type="button" onclick="openTubeClockSurprise()">Next surprise: Tube Clock ⏰ →</button>
-      <button class="bonus-skip-btn" type="button" onclick="openTubeClockSurprise()">Skip animation</button>
+      <button class="bonus-next-btn" type="button" onclick="continueFromFlowers()">Continue to birthday balloons 🎈 →</button>
+      <button class="bonus-skip-btn" type="button" onclick="continueFromFlowers()">Skip animation</button>
     </div>
   </section>
 
@@ -1065,9 +1073,41 @@
     <iframe class="tube-clock-frame" src="tube-clock.html" title="Retro Tube Clock" loading="lazy" allow="autoplay"></iframe>
     <div class="clock-bonus-bottom">
       <p>Every minute brings us closer to your special day. 🌷</p>
-      <button class="bonus-next-btn" type="button" onclick="continueFromTubeClock()">Continue to birthday wishes 🎈 →</button>
+      <button class="bonus-next-btn" type="button" onclick="continueFromTubeClock()">Back to birthday letter 💌 →</button>
     </div>
   </section>
+
+
+<script>
+  // Lado interactions: live birthday countdown button + tactile postal stamps.
+  (function () {
+    const target = new Date('2026-11-27T00:00:00+05:30').getTime();
+    const label = document.getElementById('intro-countdown-button');
+    function updateIntroCountdown() {
+      if (!label) return;
+      const diff = Math.max(0, target - Date.now());
+      if (!diff) { label.textContent = 'IT’S YOUR BIRTHDAY! TAP TO OPEN 🎂 →'; return; }
+      const days = Math.floor(diff / 86400000);
+      const hours = Math.floor(diff % 86400000 / 3600000);
+      const mins = Math.floor(diff % 3600000 / 60000);
+      const secs = Math.floor(diff % 60000 / 1000);
+      label.textContent = `${days}D ${String(hours).padStart(2,'0')}H ${String(mins).padStart(2,'0')}M ${String(secs).padStart(2,'0')}S · TAP TO OPEN 🎁 →`;
+    }
+    updateIntroCountdown();
+    window.setInterval(updateIntroCountdown, 1000);
+  })();
+  window.stampWish = function (button) {
+    if (!button) return;
+    button.classList.remove('stamp-pop');
+    void button.offsetWidth;
+    button.classList.add('stamp-pop', 'is-stamped');
+    button.setAttribute('aria-pressed', 'true');
+    button.textContent = 'DELIVERED ✓';
+    const row = button.closest('.wish-item');
+    if (row) row.classList.add('wish-stamped');
+    window.setTimeout(() => button.classList.remove('stamp-pop'), 700);
+  };
+</script>
 
 </body>
 </html>

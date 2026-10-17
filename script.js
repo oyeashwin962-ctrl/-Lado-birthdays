@@ -1288,7 +1288,8 @@ const TOTAL_SCENES = 8;
       clockOverlay.setAttribute('aria-hidden', 'true');
     }
     document.body.classList.remove('bonus-scene-open');
-    goToScene(5);
+    // The clock is the finale; returning to the letter keeps the journey in the intended order.
+    goToScene(7);
   }
 
   window.openFlowerSurprise = openFlowerSurprise;
@@ -1486,3 +1487,39 @@ const TOTAL_SCENES = 8;
 
   // Start at intro scene
   goToScene(0);
+
+
+/* Live IST countdown for the intro screen; birthday target is 27 Nov 2026, 00:00 IST. */
+(function initIntroCountdown() {
+  const target = new Date('2026-11-27T00:00:00+05:30').getTime();
+  const ids = {
+    days: document.getElementById('intro-cd-days'),
+    hours: document.getElementById('intro-cd-hours'),
+    minutes: document.getElementById('intro-cd-minutes'),
+    seconds: document.getElementById('intro-cd-seconds')
+  };
+  function tick() {
+    let remaining = Math.max(0, target - Date.now());
+    const values = {
+      days: Math.floor(remaining / 86400000),
+      hours: Math.floor((remaining % 86400000) / 3600000),
+      minutes: Math.floor((remaining % 3600000) / 60000),
+      seconds: Math.floor((remaining % 60000) / 1000)
+    };
+    Object.keys(ids).forEach(k => { if (ids[k]) ids[k].textContent = String(values[k]).padStart(2, '0'); });
+  }
+  tick();
+  window.setInterval(tick, 1000);
+})();
+
+/* Keep the retro clock as the final surprise, after the letter and memories. */
+function continueFromFlowers() {
+  const overlay = document.getElementById('flower-surprise-overlay');
+  if (overlay) {
+    overlay.classList.remove('is-open');
+    overlay.setAttribute('aria-hidden', 'true');
+  }
+  document.body.classList.remove('bonus-scene-open');
+  goToScene(5); // balloons, then wishes and letter
+}
+window.continueFromFlowers = continueFromFlowers;
