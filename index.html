@@ -330,12 +330,43 @@
     @media (prefers-reduced-motion: reduce) { #wait-quote-card { animation: none; } }
   </style>
 
+
+<style id="final-mobile-bow-position-fix">
+  @media (max-width: 600px) {
+    /* Anchor the bow to the visible phone viewport, not the oversized scene. */
+    #scene-gift #archeryRig {
+      position: fixed !important;
+      left: 50vw !important;
+      right: auto !important;
+      top: auto !important;
+      bottom: max(72px, 9vh) !important;
+      margin-left: calc(-1 * min(76px, 21vw)) !important;
+      margin-right: 0 !important;
+      width: min(152px, 42vw) !important;
+      height: auto !important;
+      z-index: 9999 !important;
+      touch-action: none !important;
+      pointer-events: auto !important;
+      transform-origin: center bottom !important;
+    }
+    #scene-gift #archeryRig .bow-svg {
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
+      pointer-events: auto !important;
+    }
+    #scene-gift #archeryRig .arrow-svg {
+      pointer-events: none !important;
+    }
+  }
+</style>
+
 </head>
 <body>
 
 <div id="birthday-gate" class="birthday-gate" aria-live="polite">
   <div class="gate-petals" aria-hidden="true">✿　♡　✧　🌸　✧　♡　✿</div>
-  <div class="gate-card" id="countdown-card">
+  <div class="gate-card" id="countdown-card" onclick="showWaitQuote(event)" role="button" tabindex="0" aria-label="Tap for a love message">
     <div class="gate-kicker">A LITTLE SURPRISE FOR MY LOVE</div>
     <div class="gate-heart">♡</div>
     <h1>For my <span>Lado</span></h1>
@@ -1073,10 +1104,15 @@
     if (quotes.length > 1 && index === lastIndex) index = (index + 1) % quotes.length;
     lastIndex = index;
     quoteText.textContent = quotes[index];
+    overlay.style.display = 'flex';
     overlay.classList.remove('is-open');
     void overlay.offsetWidth;
     overlay.classList.add('is-open');
   }
+  window.showWaitQuote = function (event) {
+    if (event) event.stopPropagation();
+    showWaitQuote();
+  };
   function closeWaitQuote() {
     const popup = document.getElementById('wait-quote-card');
     popup.style.animation = 'waitPopOut .18s ease forwards';
@@ -1089,7 +1125,6 @@
   card.setAttribute('role', 'button');
   card.setAttribute('tabindex', '0');
   card.setAttribute('aria-label', 'Tap for a little love message');
-  card.addEventListener('click', showWaitQuote);
   card.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
