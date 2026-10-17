@@ -89,7 +89,24 @@ const TOTAL_SCENES = 8;
     if (isGiftOpened) return;
     isGiftOpened = true;
 
-    // 1. Lift and tilt lid gracefully
+    const lid = document.getElementById('boxLid');
+    const heart = document.getElementById('emergingHeart');
+
+    // Mobile-safe fallback: the gift must still open if the GSAP CDN is blocked.
+    if (!window.gsap) {
+      if (lid) {
+        lid.style.transform = 'translate(45px, -75px) rotate(25deg)';
+        lid.style.transition = 'transform 850ms ease';
+      }
+      if (heart) {
+        heart.style.display = 'block';
+        heart.style.opacity = '1';
+        heart.style.transform = 'translateY(-115px) scale(1.15)';
+        heart.style.transition = 'opacity 400ms ease, transform 700ms ease';
+      }
+      return;
+    }
+
     gsap.to('#boxLid', {
       y: -150,
       x: 90,
@@ -98,7 +115,6 @@ const TOTAL_SCENES = 8;
       ease: 'back.out(1.4)'
     });
 
-    // 2. Emerging Heart rises gracefully to the center
     gsap.timeline()
       .set('#emergingHeart', { display: 'block', opacity: 0, scale: 0.2, y: 30 })
       .to('#emergingHeart', {
@@ -118,6 +134,9 @@ const TOTAL_SCENES = 8;
       });
   }
 
+  // Explicitly expose the inline HTML tap handler on mobile browsers.
+  window.openGiftBox = openGiftBox;
+
 
   function shootArcheryArrow() {
     if (isArrowShot) return;
@@ -127,6 +146,18 @@ const TOTAL_SCENES = 8;
       return;
     }
     isArrowShot = true;
+
+    // If an external animation CDN is unavailable, still advance the experience.
+    if (!window.gsap) {
+      const heart = document.getElementById('emergingHeart');
+      if (heart) heart.style.display = 'none';
+      if (arrowSvg) arrowSvg.style.display = 'none';
+      if (scenes[currentScene]) scenes[currentScene].classList.remove('active');
+      currentScene = 3;
+      if (scenes[currentScene]) scenes[currentScene].classList.add('active');
+      initConfetti();
+      return;
+    }
 
     // Disable CSS keyframe shadow animation on impact to prevent GPU rasterization lock
     const heartEl = document.getElementById('emergingHeart');
@@ -729,6 +760,9 @@ const TOTAL_SCENES = 8;
   }
 
   function animateSceneText(n) {
+    // Scene navigation must remain functional even if the animation CDN is blocked.
+    if (!window.gsap) return;
+
     if (n === 0) {
       // Scene 0: Ultra-Luxury Intro Kinetic Entrance
       gsap.killTweensOf(['.intro-badge', '.intro-time-wrap', '.intro-subtitle', '.msg-bubble']);
