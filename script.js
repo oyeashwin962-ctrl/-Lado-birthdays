@@ -44,6 +44,7 @@ const TOTAL_SCENES = 8;
 
   if (archeryRig) {
     archeryRig.addEventListener('click', (e) => {
+      e.preventDefault();
       e.stopPropagation();
       shootArcheryArrow();
     });
@@ -1305,6 +1306,50 @@ const TOTAL_SCENES = 8;
       setTimeout(() => p.remove(), 4500);
     }
   }
+
+
+  // Touch + mouse depth interaction for photo memories.
+  function initMemoryPhotoTilt() {
+    const cards = document.querySelectorAll('#scene-letter .memory-photo');
+    cards.forEach((card) => {
+      if (card.dataset.tiltReady === '1') return;
+      card.dataset.tiltReady = '1';
+
+      const reset = () => {
+        card.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1)';
+        card.style.boxShadow = '';
+      };
+
+      card.addEventListener('pointermove', (event) => {
+        const rect = card.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width;
+        const y = (event.clientY - rect.top) / rect.height;
+        const rotateY = (x - 0.5) * 9;
+        const rotateX = (0.5 - y) * 8;
+        card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-2px) scale(1.015)`;
+        card.style.boxShadow = '0 16px 30px rgba(181,39,94,.22)';
+      }, { passive: true });
+
+      card.addEventListener('pointerleave', reset, { passive: true });
+      card.addEventListener('pointerdown', (event) => {
+        if (event.pointerType === 'touch') {
+          const rect = card.getBoundingClientRect();
+          const x = (event.clientX - rect.left) / rect.width;
+          const y = (event.clientY - rect.top) / rect.height;
+          card.style.transform = `perspective(900px) rotateX(${(0.5-y)*8}deg) rotateY(${(x-0.5)*9}deg) translateY(-2px) scale(1.015)`;
+          card.style.boxShadow = '0 16px 30px rgba(181,39,94,.22)';
+          window.setTimeout(reset, 850);
+        }
+      }, { passive: true });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMemoryPhotoTilt, { once: true });
+  } else {
+    initMemoryPhotoTilt();
+  }
+
 
   // Explicit Tap / Click to advance pages
   document.addEventListener('click', (e) => {
