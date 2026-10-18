@@ -479,7 +479,7 @@
 
 <div id="birthday-gate" class="birthday-gate" aria-live="polite">
   <div class="gate-petals" aria-hidden="true">✿　♡　✧　🌸　✧　♡　✿</div>
-  <div class="gate-card" id="countdown-card" role="button" tabindex="0" aria-label="Tap for a funny wait message" onclick="if (typeof window.showWaitQuote === 'function') window.showWaitQuote(event);">
+  <div class="gate-card" id="countdown-card" role="button" tabindex="0" aria-label="Tap for a funny wait message">
     <div class="gate-kicker">A LITTLE SURPRISE FOR MY LOVE</div>
     <div class="gate-heart">♡</div>
     <h1>For my <span>Lado</span></h1>
@@ -1142,6 +1142,12 @@
   card.setAttribute('role', 'button');
   card.setAttribute('tabindex', '0');
   card.setAttribute('aria-label', 'Tap for a little love message');
+  // Bind the click directly to the popup function; do not rely on inline HTML/global lookup.
+  card.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    showWaitQuote();
+  });
   card.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
