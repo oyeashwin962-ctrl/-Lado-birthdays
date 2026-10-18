@@ -479,7 +479,7 @@
 
 <div id="birthday-gate" class="birthday-gate" aria-live="polite">
   <div class="gate-petals" aria-hidden="true">✿　♡　✧　🌸　✧　♡　✿</div>
-  <div class="gate-card" id="countdown-card" role="button" tabindex="0" aria-label="Tap for a funny wait message">
+  <div class="gate-card" id="countdown-card" role="button" tabindex="0" aria-label="Tap for a funny wait message" onclick="if (typeof window.showWaitQuote === 'function') window.showWaitQuote(event);">
     <div class="gate-kicker">A LITTLE SURPRISE FOR MY LOVE</div>
     <div class="gate-heart">♡</div>
     <h1>For my <span>Lado</span></h1>
@@ -1138,11 +1138,6 @@
       popup.style.animation = '';
     }, 170);
   }
-
-  card.addEventListener('click', (event) => {
-    if (event.target.closest('button, a')) return;
-    showWaitQuote();
-  });
 
   card.setAttribute('role', 'button');
   card.setAttribute('tabindex', '0');
