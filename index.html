@@ -470,6 +470,8 @@
     #scene-cake.cake-happy .baby-cake-character { animation: none !important; }
     #scene-cake .baby-cake-photo img { transition: none !important; }
   }
+  body.birthday-locked #app { display: none !important; }
+  body.birthday-locked #birthday-gate { display: flex !important; }
 </style>
 
 </head>
@@ -887,18 +889,37 @@
           grid.appendChild(cell);
         }
       }
-      window.openBirthdaySurprise = function () { gate.classList.add('gate-hidden'); };
-
-      // Preview the full birthday website before 27 November 2026.
-      // Normal visitors still see the countdown unless they add ?preview=1.
-      if (new URLSearchParams(window.location.search).has('preview')) {
+      const app = document.getElementById('app');
+      function isBirthdayUnlocked() { return Date.now() >= target; }
+      function unlockBirthday() {
+        if (!isBirthdayUnlocked()) return false;
+        window.__birthdayUnlocked = true;
+        document.body.classList.remove('birthday-locked');
         gate.classList.add('gate-hidden');
+        if (app) app.style.display = '';
+        return true;
       }
+      window.__birthdayUnlocked = isBirthdayUnlocked();
+      if (!window.__birthdayUnlocked) {
+        document.body.classList.add('birthday-locked');
+        if (app) app.style.display = 'none';
+      } else {
+        unlockBirthday();
+      }
+      window.openBirthdaySurprise = function () {
+        if (!unlockBirthday()) {
+          document.body.classList.add('birthday-locked');
+          if (app) app.style.display = 'none';
+          return false;
+        }
+        return true;
+      };
       function tick() {
         const now = Date.now();
         const diff = target - now;
         if (diff <= 0) {
           card.hidden = true; calendar.hidden = false; buildCalendar();
+          unlockBirthday();
           return;
         }
         const d = Math.floor(diff / 86400000), h = Math.floor(diff % 86400000 / 3600000), m = Math.floor(diff % 3600000 / 60000), sec = Math.floor(diff % 60000 / 1000);
