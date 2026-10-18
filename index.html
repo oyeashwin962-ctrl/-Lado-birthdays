@@ -479,7 +479,7 @@
 
 <div id="birthday-gate" class="birthday-gate" aria-live="polite">
   <div class="gate-petals" aria-hidden="true">✿　♡　✧　🌸　✧　♡　✿</div>
-  <div class="gate-card" id="countdown-card" onclick="showWaitQuote(event)" role="button" tabindex="0" aria-label="Tap for a love message">
+  <div class="gate-card" id="countdown-card" role="button" tabindex="0" aria-label="Tap for a funny wait message">
     <div class="gate-kicker">A LITTLE SURPRISE FOR MY LOVE</div>
     <div class="gate-heart">♡</div>
     <h1>For my <span>Lado</span></h1>
@@ -1012,7 +1012,108 @@
   const closeButton = document.getElementById('wait-quote-close');
   if (!card || !overlay || !quoteText || !closeButton) return;
 
-  const quotes = ['Yrr wait nahi ho raha aapse… sach mein ziddi ho aap! 💗', 'Madam ji, thoda jaldi aa jao na… dil se wait nahi hota. 🥹', 'Abhi se itna wait karwa rahi ho, birthday wale din kya hoga? 😤💖', 'Lado, countdown dekhne aayi thi ya mujhe tadpane? 👻', 'Ek click aur ek baat: aap bahut yaad aa rahi ho. ❤️', 'Jaldi milne ka button hota toh abhi daba deta. 🫶', 'Madam ji, aapki entry ka intezaar hai… royal entry honi chahiye! 👑', 'Wait karna mushkil hai, par aapke liye kar lenge. 💌', 'Countdown slow nahi hai… bas mera dil fast chal raha hai. 💓', 'Abhi toh surprise ka trailer hai, picture birthday par hai. 🎬', 'Lado ji, patience naam ki cheez aaj chhutti par hai. 😂', 'Aapko pata bhi hai koi yahan seconds gin raha hai? ⏳', 'Bas ek baar muskura do, wait thoda easy ho jayega. 😊', 'Madam ji, itni cute hokar itna wait karwana allowed hai kya? 😭', 'Birthday aapka hai, excitement meri double hai. 🎂', 'Ek secret: main countdown se zyada aapko dekhne ka wait kar raha hoon. 💗', 'Jiddi aap, bechain main… kya perfect combination hai! 😌', 'Abhi click kiya? Achha, ek aur cute si baat suno. 💞', 'Har second ke saath surprise aur special hota ja raha hai. ✨', 'Lado, aapke liye banaya hai… thoda pyaar extra hai. 💝', 'Ruk jao zara, dil ko aapki yaad ka notification aaya. 📩', 'Madam ji, aapko wait karwana pasand hai na? Pakdi gayi! 😏', 'Countdown dekhte raho, main pyaar bhejta rahunga. 💌', 'Kaash seconds ki jagah steps hote, seedha aap tak aa jaata. 🏃\u200d♂️', 'Aapki smile ke liye toh 100 baar bhi wait kar lenge. 🌷', 'Yeh click aapke naam… aur agla bhi aapke naam. 💖', 'Thoda sa sabr, meri jaan—surprise ready ho raha hai. 🎁', 'Time apni speed se chale, mera dil toh aapke paas hai. ❤️', 'Madam ji, countdown ko mat dekho, mera pyaar dekho. 🥰', 'Aap special ho, isliye wait bhi special banaya hai. ✨', 'Ek aur click? Matlab meri baatein pasand aa rahi hain. Hehe. 😋', 'Birthday tak ka safar bhi aapke saath cute lagta hai. 🌸', 'Main serious hoon… bas aapko tang karna bhi zaroori hai. 😌', 'Lado, jaldi aao warna main 101vi baat bhi bol dunga. 😂', 'Har tick-tick keh rahi hai: Lado ka din paas aa raha hai. ⏰', 'Yeh chhota sa pop-up, mere bade se pyaar ki taraf se. 💗', 'Aapka naam aate hi boring wait bhi romantic lagta hai. 🌹', 'Madam ji, itna attitude birthday par bhi chalega. 👻', 'Bas aap khush raho, baaki countdown main sambhal lunga. 💞', 'Surprise khulne se pehle ek virtual hug le lo. 🤗', 'Ek click = ek pyaari si yaad. Aaj ka rule hai. 💌', 'Yeh website bhi keh rahi hai: Lado, jaldi aa jao! 😂', 'Wait karte karte aapke liye aur pyaar badh raha hai. 💓', 'Main impatient nahi hoon… bas aapke maamle mein ho jaata hoon. 😅', 'Aapki birthday wali smile imagine karke hi khushi ho rahi hai. 🎂', 'Thoda aur wait, phir aapke liye poora pyaar hi pyaar. 💝', 'Madam ji, countdown ko refresh mat karna, pyaar already loaded hai. 😉', 'Aapko yaad karna meri favourite notification hai. 📱', 'Ek pop-up aapke liye, ek smile meri taraf se. 😊', 'Lado, aapke bina seconds bhi extra long lagte hain. ⌛', 'Yeh wait khatam hoga, par aapko tang karna nahi. 😜', 'Bas itna samajh lo: surprise chhota, pyaar unlimited. ♾️', 'Madam ji, aapko special feel karwana mera mission hai. 🎯', 'Abhi se butterflies ho rahi hain… birthday par toh pata nahi! 🦋', 'Ek aur click par ek aur confession: I miss you. 💗', 'Aap meri favourite person ho, isliye favourite wait bhi aapka. 🌷', 'Jaldi aane ki zaroorat nahi… par dil toh yahi bolta hai. 🥹', 'Yeh countdown nahi, aapke liye likha hua love note hai. 💌', 'Madam ji, aapka surprise patiently wait kar raha hai. Main nahi. 😂', 'Aapki ek hasi ke liye poora din bana sakta hoon. ☀️', 'Bas aap aur main, aur thodi si birthday wali magic. ✨', 'Click kiya? Toh ek flying kiss accept karo. 😘', 'Main yahan hoon, aap wahan… par pyaar full signal par hai. 📶❤️', 'Wait ka har second aapke naam likh diya hai. 📝', 'Birthday queen ke liye countdown bhi royal hona chahiye. 👑', 'Madam ji, aapko surprise pasand aayega—dil se banaya hai. 💖', 'Aapka naam screen par aur smile mere face par. 😊', 'Ek click aur ek reminder: aap bahut precious ho. 💎', 'Main aapko tease kar raha hoon, kyunki aap cute lagti ho. 😌', 'Thoda sa intezaar, phir full-on birthday wali khushi. 🎉', 'Lado, aapki khushi meri favourite achievement hai. 🫶', 'Countdown ka har number keh raha hai: almost there! ⏳', 'Madam ji, zidd aapki, surprise mera. Deal? 🤝💗', 'Aapko haste dekhna hi meri favourite ending hai. 🌸', 'Yeh pop-up chhota hai, par ismein pyaar bada hai. 💝', 'Abhi ek smile de do, main agla second bhi nikaal lunga. 😄', 'Birthday ka wait karte karte aapki yaadein replay ho rahi hain. 🎞️', 'Main har click par nayi baat bolunga, aap bas muskura dena. 💌', 'Yeh wala message specially meri Lado ke liye. ❤️', 'Madam ji, aapko pata hai na aap kitni special ho? 🥹', 'Surprise ke saath ek promise: aapko hamesha smile karane ki koshish. 🌷', 'Main countdown se nahi, aapse milne se excited hoon. 💓', 'Bas thoda sa aur… phir cake, wishes aur pyaar! 🎂', 'Aap meri favourite notification se bhi zyada special ho. 🔔', 'Yeh click aapke liye ek tiny love letter hai. 💌', 'Jitni baar click, utni baar yaad dilaoonga: I love you. 💗', 'Wait karna mushkil hai, aapko pyaar karna easy. 🫶', 'Madam ji, please jaldi aa jao… dil ne request bheji hai. 🥺', 'Aapka birthday aane wala hai aur main already celebrate kar raha hoon. 🎉', 'Ek aur second gaya, aapke special day ke aur paas aaye. ✨', 'Lado, aap meri favourite story ka favourite chapter ho. 📖', 'Main jiddi nahi… bas aapke liye thoda extra excited hoon. 😇', 'Is click ke badle ek virtual cuddle le lo. 🤗', 'Aapki khushi ke liye chhoti chhoti surprises banata rahunga. 🎁', 'Madam ji, aapko wait karwana galat hai… par cute bhi. 😂', 'Bas ek baat yaad rakhna: aap loved ho, bahut zyada. 💖', 'Countdown chal raha hai, par mera pyaar rukta nahi. ♾️', 'Har baar click karo, main phir se bolunga—miss you, Lado. 💗', 'Abhi toh 100 baatein hain, aur dil mein hazaar. 🌹', 'Yrr wait nahi ho raha aapse… sach mein ziddi ho aap! Ab smile karo. 💞'];
+  const quotes = [
+    'Madam ji, thoda wait karna padega 😄🎀',
+    'Madam ji, bohot jaldi hai aapko 😂⏳',
+    'Arey madam ji, sabr rakhiye zara 😜🌸',
+    'Rukiye ji, abhi surprise baaki hai 🎁✨',
+    'Madam ji, line mein lagiye please 😆💗',
+    'Itni bhi kya jaldi hai madam ji? 😂',
+    'Bas bas madam ji, countdown ko saans lene do 😅⏰',
+    'Madam ji, thoda patience bhi rakh lo na 😇🌷',
+    'Arre wah, phir se aa gayi? 😂🎀',
+    'Madam ji, baar-baar check karne se date jaldi nahi aayegi 😜',
+    'Zara aaram se madam ji, sab time par hoga 😌✨',
+    'Madam ji, intezaar ka bhi apna maza hai 😄🍭',
+    'Aapko toh abhi se jaldi mach rahi hai 😂💞',
+    'Madam ji, abhi toh trailer bhi nahi aaya 🎬😆',
+    'Ek minute madam ji… jaldi kis baat ki? 😜',
+    'Madam ji, thoda sa sabr dikha do please 🙏😂',
+    'Aap phir aa gayi countdown dekhne? 👀🎀',
+    'Madam ji, itni checking se countdown sharma jayega 😆',
+    'Rukiye rukiye, abhi waqt nahi hua 😄⏳',
+    'Madam ji, surprise apni speed se aa raha hai 🎁',
+    'Jaldi ka kaam… madam ji, aap samajh hi gayi 😂',
+    'Madam ji, wait mode ON rakhiye 😎⏰',
+    'Bas thoda aur intezaar, madam ji 🌸',
+    'Madam ji, countdown ko ghoor matiye 😂👀',
+    'Arre ji, birthday bhaag ke thodi jaayega 😄🎂',
+    'Madam ji, abhi entry nahi milegi 😜🔒',
+    'Itni jaldi? Madam ji, kya baat hai 😂',
+    'Madam ji, thoda break le lo, phir aana ☕😄',
+    'Aapka patience test chal raha hai madam ji 😆🎀',
+    'Madam ji, surprise ko ready toh hone do 🎁',
+    'Oho madam ji, phir se button dhoondh rahi ho? 😂',
+    'Madam ji, abhi countdown hi dekhna hai 😌⏳',
+    'Thoda sa wait, phir full masti 😄🎉',
+    'Madam ji, abhi nahi… baad mein pakka 😜',
+    'Aapki jaldi dekh kar clock bhi hans rahi hai 😂🕒',
+    'Madam ji, rules toh rules hain 😎🔒',
+    'Zara thehriye madam ji, please 😄🌷',
+    'Madam ji, abhi surprise chhutti par hai 😂🎁',
+    'Itna refresh mat karo ji, countdown wahi hai 😆',
+    'Madam ji, patience ki jai ho 🙌😂',
+    'Aap toh badi impatient nikli madam ji 😜',
+    'Madam ji, thoda sa wait karna seekh lo 😇',
+    'Abhi se itni excitement? 😂🎉',
+    'Madam ji, surprise ko final touch mil raha hai ✨',
+    'Aapki attendance phir lag gayi 😄📋',
+    'Madam ji, wait karne ka record banaogi kya? 😂',
+    'Rukiye ji, time aane do ⏰🌸',
+    'Madam ji, countdown ko disturb mat karo 😆',
+    'Bas thoda sa aur, madam ji 🎀',
+    'Aap phir check karne aa gayi! 😂👀',
+    'Madam ji, jaldi ka button abhi bana nahi 😜',
+    'Aaram se madam ji, koi race nahi hai 😄',
+    'Madam ji, abhi suspense rehne do 🤫🎁',
+    'Aapki jaldi dekh kar maza aa raha hai 😂',
+    'Madam ji, sabr ka test pass karna hai 😆🏆',
+    'O ji, abhi toh date door hai ⏳',
+    'Madam ji, itni baar aane ka attendance bonus nahi milega 😂',
+    'Rukiye ji, countdown ko kaam karne do 😄',
+    'Madam ji, surprise ko time chahiye 🎀',
+    'Aapki nazar toh countdown par hi hai 👀😂',
+    'Madam ji, bas bas, abhi time baaki hai 😜',
+    'Thoda patience, thodi smile 😊🌷',
+    'Madam ji, abhi unlock nahi hoga 😄🔒',
+    'Aaj ka task: wait karna 😂📝',
+    'Madam ji, jaldi karne se seconds nahi bhaagte 😆',
+    'Zara dheere madam ji, suspense hai suspense 🤫',
+    'Madam ji, aapki checking successful… par wait abhi baaki 😜',
+    'Abhi nahi ji, thoda baad mein 😄⏳',
+    'Madam ji, countdown se dosti kar lo 😂',
+    'Bas dekhte raho, surprise time par aayega 🎁',
+    'Madam ji, abhi waiting room mein rahiye 😆🎀',
+    'Aapka wait karne ka talent kamaal hai 😂',
+    'Madam ji, abhi patience wali setting on karo 😇',
+    'Jaldi-jaldi bolne se birthday jaldi nahi aata 😜🎂',
+    'Madam ji, timer ko pressure mat do 😂',
+    'Thoda ruk jao ji, maza aayega 😄✨',
+    'Madam ji, suspense ko suspense rehne do 🤫',
+    'Aapki excitement full, timer apni speed par 😂',
+    'Madam ji, ek chhoti si break le lo 🌸',
+    'Abhi surprise ka gate band hai ji 🔒😄',
+    'Madam ji, wait karna bhi ek kala hai 😂🎨',
+    'Oho, countdown checking again! 😆',
+    'Madam ji, itni jaldi kis baat ki bhala? 😜',
+    'Thoda aur sabr, phir dhamaka 🎉',
+    'Madam ji, abhi bas countdown wali duty hai ⏰',
+    'Aapka patience meter check ho raha hai 😂',
+    'Madam ji, date ko aane toh do 😄',
+    'Rukiye zara, surprise ready ho raha hai 🎁✨',
+    'Madam ji, aaj sirf wait-wait khelna hai 😆',
+    'Countdown par nazar, madam ji 👀🎀',
+    'Madam ji, abhi entry ka time nahi hua 😜',
+    'Ek minute ji, jaldi bilkul mana hai 😂',
+    'Madam ji, smile karo aur wait karo 😊',
+    'Abhi suspense baaki hai, madam ji 🤫',
+    'Madam ji, itni checking ke liye medal chahiye 🏅😂',
+    'Thoda sa wait aur, phir aage badhna 😄',
+    'Madam ji, time se pehle kaam nahi hota ⏳',
+    'Bas ji, ab agli baar thodi der baad aana 😂',
+    'Madam ji, wait karna padega… rule hai rule 😎🎀',
+    'Madam ji, ab sach mein thoda wait kar lo na 😄🎀'
+  ];
   let lastIndex = -1;
 
   function showWaitQuote() {
@@ -1037,6 +1138,11 @@
       popup.style.animation = '';
     }, 170);
   }
+
+  card.addEventListener('click', (event) => {
+    if (event.target.closest('button, a')) return;
+    showWaitQuote();
+  });
 
   card.setAttribute('role', 'button');
   card.setAttribute('tabindex', '0');
