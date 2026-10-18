@@ -346,11 +346,19 @@ const TOTAL_SCENES = 8;
   let isBalloonShooting = false;
 
   function shootCurrentBalloon() {
-    if (currentBalloonIdx >= 5) {
-      goToScene(6); // All 5 balloons popped! Next tap advances to Wishes List
+    const balloonItems = Array.from({ length: 5 }, (_, i) => document.getElementById(`bItem-${i}`)).filter(Boolean);
+    const poppedCount = balloonItems.filter(item => item.classList.contains('popped') || item.classList.contains('popping')).length;
+    if (balloonItems.length === 5 && poppedCount >= 5) {
+      currentBalloonIdx = 5;
+      goToScene(6); // All five balloons are finished; continue to Wishes List.
       return;
     }
-    shootBalloon(currentBalloonIdx);
+    // Find the first balloon that has not been popped, avoiding a stale counter.
+    const nextIndex = balloonItems.findIndex(item => !item.classList.contains('popped') && !item.classList.contains('popping'));
+    if (nextIndex >= 0) {
+      currentBalloonIdx = nextIndex;
+      shootBalloon(nextIndex);
+    }
   }
 
   function shootBalloon(index) {
@@ -451,7 +459,8 @@ const TOTAL_SCENES = 8;
     if (!cardEl || !labelEl || !textEl) return;
 
     const themeColor = balloonThemeColors[index] || '#ff4081';
-    const newLabel = `REASON ${index + 1} OF 5`;
+    const poppedSoFar = Math.min(5, index + 1);
+    const newLabel = poppedSoFar === 5 ? 'ALL 5 BALLOONS POPPED 🎉' : `REASON ${poppedSoFar} OF 5`;
     const newText = balloonReasons[index];
 
     // Check if card is hidden (first pop)
@@ -761,6 +770,8 @@ const TOTAL_SCENES = 8;
   ];
 
   function goToScene(n) {
+    // Birthday scenes are locked until 27 Nov 2026, 00:00 IST.
+    if (window.__birthdayUnlocked !== true) return;
     if (n < 0 || n >= TOTAL_SCENES) return;
     if (sceneTimer) clearTimeout(sceneTimer);
     if (n !== 7) stopGrandFinaleAmbientLoop();
