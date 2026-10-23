@@ -894,7 +894,9 @@
         }
       }
       const app = document.getElementById('app');
-      function isBirthdayUnlocked() { return Date.now() >= target; }
+      // Preview mode is for testing only; the real birthday date remains unchanged.
+      const previewMode = new URLSearchParams(window.location.search).get('preview') === '1';
+      function isBirthdayUnlocked() { return previewMode || Date.now() >= target; }
       function unlockBirthday() {
         if (!isBirthdayUnlocked()) return false;
         window.__birthdayUnlocked = true;
