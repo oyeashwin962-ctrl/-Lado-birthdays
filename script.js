@@ -88,46 +88,54 @@ const TOTAL_SCENES = 8;
 
   function openGiftBox() {
     if (isGiftOpened) return;
-    isGiftOpened = true;
 
     const lid = document.getElementById('boxLid');
     const heart = document.getElementById('emergingHeart');
 
-    // Mobile-safe fallback: the gift must still open if the GSAP CDN is blocked.
-    if (!window.gsap) {
-      if (lid) {
-        lid.style.transform = 'translate(45px, -75px) rotate(25deg)';
-        lid.style.transition = 'transform 850ms ease';
-      }
-      if (heart) {
-        heart.style.display = 'block';
-        heart.style.opacity = '1';
-        heart.style.transform = 'translateY(-115px) scale(1.15)';
-        heart.style.transition = 'opacity 400ms ease, transform 700ms ease';
-      }
+    if (!lid || !heart) {
+      console.error('Gift box animation could not start: #boxLid or #emergingHeart is missing.');
       return;
     }
 
-    gsap.to('#boxLid', {
-      y: -150,
-      x: 90,
-      rotation: 40,
+    isGiftOpened = true;
+
+    // Keep the lid close to the box instead of moving it far above/right.
+    if (!window.gsap) {
+      lid.style.transition = 'transform 850ms ease';
+      lid.style.transform = 'translate(18px, -45px) rotate(25deg)';
+
+      heart.style.display = 'block';
+      heart.style.opacity = '1';
+      heart.style.transition = 'opacity 400ms ease, transform 700ms ease';
+      heart.style.transform = 'translateY(-15px) scale(1.15)';
+      return;
+    }
+
+    gsap.to(lid, {
+      y: -45,
+      x: 18,
+      rotation: 25,
       duration: 0.85,
       ease: 'back.out(1.4)'
     });
 
     gsap.timeline()
-      .set('#emergingHeart', { display: 'block', opacity: 0, scale: 0.2, y: 30 })
-      .to('#emergingHeart', {
+      .set(heart, {
+        display: 'block',
+        opacity: 0,
+        scale: 0.2,
+        y: 10
+      })
+      .to(heart, {
         opacity: 1,
-        y: -155,
-        scale: 1.25,
+        y: -15,
+        scale: 1.15,
         duration: 0.9,
         ease: 'back.out(1.8)',
         delay: 0.15
       })
-      .to('#emergingHeart', {
-        y: '-=12',
+      .to(heart, {
+        y: '-=5',
         duration: 1.8,
         repeat: -1,
         yoyo: true,
