@@ -479,7 +479,7 @@
 
 <div id="birthday-gate" class="birthday-gate" aria-live="polite">
   <div class="gate-petals" aria-hidden="true">✿　♡　✧　🌸　✧　♡　✿</div>
-  <div class="gate-card" id="countdown-card" role="button" tabindex="0" aria-label="Tap for a funny wait message">
+  <div class="gate-card" id="countdown-card" role="button" tabindex="0" aria-label="Tap for a funny wait message" onclick="event.stopPropagation(); const q=['Madam ji, thoda wait karna padega 😄🎀','Madam ji, bohot jaldi hai aapko 😂⏳','Arey madam ji, sabr rakhiye zara 😜🌸','Rukiye ji, abhi surprise baaki hai 🎁✨','Madam ji, line mein lagiye please 😆💗','Itni bhi kya jaldi hai madam ji? 😂','Countdown ko saans lene do madam ji 😅⏰','Madam ji, birthday bhaag ke thodi jaayega 😄🎂','Madam ji, abhi entry nahi milegi 😜🔒','Bas thoda aur intezaar, madam ji 🌸']; const o=document.getElementById('wait-quote-overlay'); const t=document.getElementById('wait-quote-text'); t.textContent=q[Math.floor(Math.random()*q.length)]; o.style.display='flex'; o.classList.add('is-open');">
     <div class="gate-kicker">A LITTLE SURPRISE FOR MY LOVE</div>
     <div class="gate-heart">♡</div>
     <h1>For my <span>Lado</span></h1>
@@ -1001,7 +1001,7 @@
     <div class="wait-label">EK CHHOTI SI BAAT, MERI LADO KE LIYE</div>
     <div id="wait-quote-text">Yrr wait nahi ho raha aapse… sach mein ziddi ho aap! 💗</div>
     <p id="wait-quote-hint">Ek aur pyaari baat sunne ke liye phir se countdown par tap karna. ✨</p>
-    <button id="wait-quote-close" type="button">Achha baba, wait karte hain 💌</button>
+    <button id="wait-quote-close" type="button" onclick="event.stopPropagation(); const o=document.getElementById('wait-quote-overlay'); o.classList.remove('is-open'); o.style.display='none';">Achha baba, wait karte hain 💌</button>
   </div>
 </div>
 <script id="wait-quote-interaction">
