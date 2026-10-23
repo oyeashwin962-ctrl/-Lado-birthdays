@@ -306,7 +306,11 @@
     #countdown-card { cursor: pointer; -webkit-tap-highlight-color: transparent; }
     #countdown-card:active { transform: scale(.985); }
     #wait-quote-overlay {
-      position: fixed; inset: 0; z-index: 10000; display: none;
+      /* Keep the quote popup above the birthday gate and all site layers. */
+      position: fixed !important;
+      inset: 0 !important;
+      z-index: 2147483647 !important;
+      display: none;
       align-items: center; justify-content: center; padding: 22px;
       background: rgba(69, 19, 48, .28); backdrop-filter: blur(7px);
       -webkit-backdrop-filter: blur(7px);
